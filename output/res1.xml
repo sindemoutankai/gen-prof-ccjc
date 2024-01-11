@@ -1,22 +1,10 @@
-<output>
-  <hashtags>#キャンプファイヤー</hashtags>
-  <big_five_chart>
-    <openness>23</openness>
-    <conscientiousness>99</conscientiousness>
-    <extraversion>87</extraversion>
-    <agreeableness>12</agreeableness>
-    <neuroticism>21</neuroticism>
-  </big_five_chart>
-  <mbti>ESTJ</mbti>
-  <personality>責任感が強く、信念を持つ。社交的で活動的。時には頑固で厳しい一面もあるが、誠実さと公平さに溢れる。男性。30代。スポーティな外見で元気な話し方。</personality>
-  <hometown>活気ある札幌工場</hometown>
-  <occupation>ビジネスマン</occupation>
-  <favorite_things>サッカー, ボードゲーム</favorite_things>
-  <hobby>登山</hobby>
-  <skill>すべてのスポーツで優れた選手</skill>
-  <habit>朝早く起きてランニング</habit>
-  <dream>世界一のビジネスリーダーになること</dream>
-  <talent>的確で迅速な意思決定</talent>
-  <motto>「成功は努力と決断によって創出される」</motto>
-  <comment>颯爽とビジネスの世界を駆け抜けましょう！</comment>
-</output>
+このエラーは、指定されたファイルをUTF-8としてデコードしようとしたときに、無効なバイトが見つかったことを示しています。解決策としては、次のいずれかの方法を試すことができます：
+
+1. ファイルのエンコーディングを変更する：指定されたエンコーディングでファイルを正しく読み込むことができない場合、他のエンコーディングを試してみることができます。代わりに、'utf-8'ではなく、'shift-jis'や'cp932'などのエンコーディングを指定してみてください。具体的には、`PromptGenerator`クラスの`read_prompt`メソッドで指定されたエンコーディングを変更する必要があります。
+
+2. バイナリモードでファイルを開く：バイナリモードでファイルを開くことも、エンコーディングの問題を回避する方法です。これにより、ファイルのエンコーディングに関係なく、データを読み取ることができます。具体的には、`PromptGenerator`クラスの`generate_prompt_files`メソッド内で`open`関数を次のように変更してください：
+```python
+with open(self.csv_file, 'rb') as csvfile:
+```
+
+どちらの方法でも、問題が解決するはずです。どちらの方法を選択するかは、環境やファイルの内容に依存する場合があります。試してみてください。

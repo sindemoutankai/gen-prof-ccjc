@@ -1,6 +1,3 @@
-下記のコードを書いたら、エラーが出た。
-解決法は？
-＃コード
 import csv
 
 class PromptGenerator:
@@ -15,18 +12,16 @@ class PromptGenerator:
 
     def generate_prompt_files(self):
         template = self.read_prompt()
-        with open(self.csv_file, newline='', encoding= "utf-8") as csvfile:
+        with open(self.csv_file, 'r', encoding= "cp932") as csvfile:
             reader = csv.reader(csvfile)
             for i, row in enumerate(reader):
                 score = row[2:]
                 print(score)
                 new_prompt = template.format(*score)
                 file_name = f'{self.output_folder}/{row[0]}_{row[1]}_prompt.txt'
-                with open(file_name, 'w', encoding= "utf-8") as outfile:
+                with open(file_name, 'w', encoding= "cp932") as outfile:
+
                     outfile.write(new_prompt)
 
 generator = PromptGenerator('assets/personality_list.csv', 'prompt.txt', 'assets')
 generator.generate_prompt_files()
-
-＃エラーメッセージ
-UnicodeDecodeError: 'utf-8' codec can't decode byte 0x88 in position 80: invalid start byte
