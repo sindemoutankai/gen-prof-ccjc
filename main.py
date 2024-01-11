@@ -2,7 +2,7 @@ import config
 from generate import Generate
 
 api_key = config.OPENAI_API_KEY
-#print(api_key)
+print(api_key)
 
 input_file = 'prompt.txt'
 chat_gpt = Generate(input_file)
