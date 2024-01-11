@@ -114,10 +114,10 @@ step2：パーソナリティをもとに、Aになりきってプロフィー�
 
 --------------
 hashtags: 石けん作り
-開放性（Openness）: Score 1
-勤勉性（Conscientiousness）: Score 2
-外向性（Extraversion）: Score 3
-協調性（Agreeableness）: Score 4
-神経症的傾向（Neuroticism）: Score 5
-性格 (character): aaa
+開放性（Openness）: 40
+勤勉性（Conscientiousness）: 80
+外向性（Extraversion）: 30
+協調性（Agreeableness）: 70
+神経症的傾向（Neuroticism）: 50
+性格 (character): 慎重
 出身 (hometown): 出身
