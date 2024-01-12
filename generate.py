@@ -1,11 +1,13 @@
 from openai import OpenAI
 import config
+from checker import Checker
 from dotenv import load_dotenv
 import os
 
 class Generate:
     def __init__(self, prompt, gpt_model='gpt-3.5-turbo'):
         self.client = OpenAI()
+        self.checker = Checker('assets/input/ngword_list.csv')
         self.prompt = prompt
         self.gpt_model = gpt_model
 
@@ -24,7 +26,15 @@ class Generate:
                       {"role": "user", "content": prompt}]
         )
         res = response.choices[0].message.content
-        #print(res)
+        is_valid_format = self.checker.xml_checker(res)
+        contains_ng_word = self.checker.detect_ng_word(res)
+        if not is_valid_format:
+            print("XML error")
+            print(res)
+            return self.get_response(prompt)
+        if not contains_ng_word:
+            print('detect ng word')
+            return self.get_response(prompt)
         return res
 
     def process_prompt_and_generate_output(self, output_file, output_folder):

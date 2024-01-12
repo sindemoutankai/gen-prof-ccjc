@@ -24,6 +24,7 @@ def main():
     personality_list = 'assets/input/personality_list.csv'
     hobbies_list = 'assets/input/hobbies_list.csv'
     hometown_list = 'assets/input/hometown_list.csv'
+    ng_list = 'assets/input/ngword_list'
 
     # prompt用インスタンス
     generator = PromptGenerate(personality_list, prompt_file, hobbies_list, hometown_list)
