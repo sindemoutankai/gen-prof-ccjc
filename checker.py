@@ -18,15 +18,22 @@ class Checker:
                 'skill', 'habit', 'dream', 'talent', 'motto', 'comment'
             }
 
-            for child in root:
-                if child.tag not in expected_tags:
+            # XML内のタグを集める
+            found_tags = {child.tag for child in root}
+
+            # 期待されるすべてのタグが存在するかチェック
+            if not expected_tags.issubset(found_tags):
+                return False
+
+            # 'big_five_chart' タグのサブタグをチェック
+            big_five_chart = root.find('big_five_chart')
+            if big_five_chart is not None:
+                expected_subtags = {'openness', 'conscientiousness',
+                                    'extraversion', 'agreeableness', 'neuroticism'}
+                found_subtags = {child.tag for child in big_five_chart}
+                if not expected_subtags.issubset(found_subtags):
                     return False
-                if child.tag == 'big_five_chart':
-                    expected_subtags = {'openness', 'conscientiousness',
-                                        'extraversion', 'agreeableness', 'neuroticism'}
-                    for subchild in child:
-                        if subchild.tag not in expected_subtags:
-                            return False
+
             return True
         except ET.ParseError:
             return False

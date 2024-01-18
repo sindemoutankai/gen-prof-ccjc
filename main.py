@@ -1,5 +1,5 @@
 import config
-from generate import Generate
+from generate2 import Generate2
 from promptgenerate import PromptGenerate
 import random
 import os
@@ -9,10 +9,10 @@ from multiprocessing import Pool
 
 def process_output(i, idx, generator):
     prompt, _type, type_id = generator.gen_full_prompt(idx)
-    chat_gpt = Generate(prompt, gpt_model='gpt-3.5-turbo')
+    chat_gpt = Generate2(prompt, gpt_model='gpt-3.5-turbo-instruct')
 
     output_folder = f"output/{_type}_output"
-    output_file_path = f"{output_folder}/{_type}_{type_id:02d}_{i + 1:04d}.xml"
+    output_file_path = f"{output_folder}/{_type}_{type_id:02d}_{i + 1:03d}.xml"
     chat_gpt.process_prompt_and_generate_output(output_file_path, output_folder)
 
 
@@ -38,7 +38,7 @@ def main():
     numbers.sort()
 
     #multiprocessing iteration
-    with Pool(5) as pool:
+    with Pool(2) as pool:
         args = [(i, idx, generator) for i, idx in enumerate(numbers)]
         list(tqdm(pool.starmap(process_output, args), total=len(numbers)))
 
