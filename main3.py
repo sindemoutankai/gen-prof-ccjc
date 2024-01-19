@@ -98,6 +98,7 @@ def main3(retry_count=0, max_retries=5):
         with open('checkpoint.json', 'w') as f:
             checkpoint_dic = {'checkpoint': {str(key): False for key in checkpoint_key}}
             json.dump(checkpoint_dic, f)
+        checkpoints = checkpoint_dic
 
     # 未完のpointのみのよび出しリストを作成する
     numbers = []
