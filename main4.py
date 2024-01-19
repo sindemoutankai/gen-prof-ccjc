@@ -35,7 +35,6 @@ def process_output(id, idx, generator, checkpoint):
             chat_gpt.process_prompt_and_generate_output(output_file_path, output_folder)
 
         # チェックポイントの更新
-
         checkpoint.update(id, idx, global_lock)
 
     #レートリミット処理
@@ -59,7 +58,6 @@ def process_output(id, idx, generator, checkpoint):
         else:
             raise  # その他のエラーの場合は例外を再度発生させる
 
-# main2関数の定義
 def main4(retry_count=0, max_retries=5):
     start_time = time.time()
 
@@ -67,13 +65,13 @@ def main4(retry_count=0, max_retries=5):
     start_time = time.time()
     api_key = config.OPENAI_API_KEY
     # set up
+    checklist_init = os.getenv("CHECKLIST_INIT")
     number_of_gen = int(os.getenv("NUMBER_OF_GEN", 15000))
     prompt_file = 'prompt.txt'
     personality_list = 'assets/input/personality_list.csv'
     hobbies_list = 'assets/input/hobbies_list.csv'
     hometown_list = 'assets/input/hometown_list.csv'
     ng_list = 'assets/input/ngword_list'
-    checklist_init = True #checklistを真新しくする場合はTrue
 
     # prompt用インスタンス
     generator = PromptGenerate(personality_list, prompt_file, hobbies_list, hometown_list)
@@ -97,7 +95,7 @@ def main4(retry_count=0, max_retries=5):
     # init lock
     lock = Lock()
     # multiprocessing iteration with lock
-    with Pool(4, initializer=init_lock, initargs=(lock,)) as pool:
+    with Pool(10, initializer=init_lock, initargs=(lock,)) as pool:
         args = [(iteration_numbers[i], idx, generator, checkpoint) for i, idx in enumerate(numbers)]
         list(tqdm(pool.starmap(process_output, args), total=len(numbers)))
 
