@@ -14,8 +14,7 @@ class Checker:
 
             expected_tags = {
                 'hashtags', 'big_five_chart', 'character', 'personality',
-                'hometown', 'occupation', 'favorite_things', 'hobby',
-                'skill', 'habit', 'dream', 'talent', 'motto', 'comment'
+                'hometown'
             }
 
             for child in root:
@@ -27,6 +26,29 @@ class Checker:
                     for subchild in child:
                         if subchild.tag not in expected_subtags:
                             return False
+            return True
+        except ET.ParseError:
+            return False
+
+    def xml_checker2(self, xml_text):
+        try:
+            root = ET.fromstring(xml_text)
+
+            if root.tag != 'profile':
+                return False
+
+            expected_tags = {
+                'occupation', 'favorite_things', 'hobby',
+                'skill', 'habit', 'dream', 'talent', 'motto', 'comment'
+            }
+
+            # XML内のタグ集める
+            found_tags = {child.tag for child in root}
+
+            # 期待されるすべてのタグが存在するかチェック
+            if not expected_tags.issubset(found_tags):
+                return False
+
             return True
         except ET.ParseError:
             return False
