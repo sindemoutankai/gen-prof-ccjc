@@ -29,7 +29,7 @@ def process_output(id, idx, generator, checkpoint):
         chat_gpt = Generate(prompt, gpt_model='gpt-3.5-turbo')
 
         output_folder = f"output/{_type}_output"
-        output_file_path = f"{output_folder}/{_type}_{type_id:02d}_{id:07d}.xml"
+        output_file_path = f"{output_folder}/{_type}_{type_id:02d}_{id:05d}.xml"
         #上書きしないように
         if not os.path.exists(output_file_path):
             chat_gpt.process_prompt_and_generate_output(output_file_path, output_folder)
@@ -95,7 +95,7 @@ def main4(retry_count=0, max_retries=5):
     # init lock
     lock = Lock()
     # multiprocessing iteration with lock
-    with Pool(10, initializer=init_lock, initargs=(lock,)) as pool:
+    with Pool(12, initializer=init_lock, initargs=(lock,)) as pool:
         args = [(iteration_numbers[i], idx, generator, checkpoint) for i, idx in enumerate(numbers)]
         list(tqdm(pool.starmap(process_output, args), total=len(numbers)))
 
@@ -105,4 +105,3 @@ def main4(retry_count=0, max_retries=5):
 
 if __name__ == "__main__":
     main4()
-

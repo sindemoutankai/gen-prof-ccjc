@@ -11,34 +11,34 @@ step2：入力からAのパーソナリティを想像し、できるだけ詳�
 # 出力フォーマット
 次のXML形式で出力します。
 <profile>
-  <hashtags></hashtags>
-  <big_five_chart>
-    <openness></openness>
-    <conscientiousness></conscientiousness>
-    <extraversion></extraversion>
-    <agreeableness></agreeableness>
-    <neuroticism></neuroticism>
-  </big_five_chart>
-  <character></character>
-  <personality></personality>
-  <hometown></hometown>
+<hashtags></hashtags>
+<big_five_chart>
+<openness></openness>
+<conscientiousness></conscientiousness>
+<extraversion></extraversion>
+<agreeableness></agreeableness>
+<neuroticism></neuroticism>
+</big_five_chart>
+<character></character>
+<personality></personality>
+<hometown></hometown>
 </profile>
 
 # プロフィールの例
 生成したいプロフィールの例を示します。
 （例）
 <profile>
-  <hashtags>#お寺, #日本庭園, #歴史, #瞑想, #星空, #ノスタルジック, #紅葉, #雪景色 #マフラー #手芸 #読書 #俳句 </hashtags>
-  <big_five_chart>
-    <openness>89</openness>
-    <conscientiousness>8</conscientiousness>
-    <extraversion>23</extraversion>
-    <agreeableness>89</agreeableness>
-    <neuroticism>45</neuroticism>
-  </big_five_chart>
-  <character>慎重</character>
-  <personality>非常に開放的で創造的、しかし計画性は低く、内向的。他人に対しては非常に協調的で、感情の起伏がややある。論理的な推論と複雑な問題解決を楽しむ。古風な自然を好み、一人でゆっくりとノスタルジックな雰囲気を楽しむ。30代。女性。おっとり。芯が強い。ゆったりした服装を好む。丁寧でふわっとした話し方。</personality>
-  <hometown>京都工場</hometown>
+<hashtags>#お寺, #日本庭園, #歴史, #瞑想, #星空, #ノスタルジック, #紅葉, #雪景色 #マフラー #手芸 #読書 #俳句 </hashtags>
+<big_five_chart>
+<openness>89</openness>
+<conscientiousness>8</conscientiousness>
+<extraversion>23</extraversion>
+<agreeableness>89</agreeableness>
+<neuroticism>45</neuroticism>
+</big_five_chart>
+<character>慎重</character>
+<personality>非常に開放的で創造的、しかし計画性は低く、内向的。他人に対しては非常に協調的で、感情の起伏がややある。論理的な推論と複雑な問題解決を楽しむ。古風な自然を好み、一人でゆっくりとノスタルジックな雰囲気を楽しむ。30代。女性。おっとり。芯が強い。ゆったりした服装を好む。丁寧でふわっとした話し方。</personality>
+<hometown>京都工場</hometown>
 </profile>
 
 
@@ -60,12 +60,12 @@ step2：入力からAのパーソナリティを想像し、できるだけ詳�
 - hometown: 出身地
   - 入力をそのまま出力
 
+
 # 注意点
 以下の注意点を必ず守ってください。
-- 必ずハッシュタグを12
+- 必ずハッシュタグを12個つけてください。
 - personalityの設定が最も重要です。詳細かつ独創的に、世界に一人しかいない人物像を規定してください。200文字以上出力してください
 - 項目ごとにこの人物の異なる側面に着目してください。同じような内容が繰り返されてはいけません。
-
 
 
 説明は以上です。では始めます。
@@ -73,11 +73,11 @@ step2：入力からAのパーソナリティを想像し、できるだけ詳�
 余計なことは言わず、XMLのみ出力してください。
 
 --------------
-hashtags: 石けん作り
-開放性（Openness）: 50
-勤勉性（Conscientiousness）: 50
-外向性（Extraversion）: 70
-協調性（Agreeableness）: 40
-神経症的傾向（Neuroticism）: 30
-性格 (character): 図太い
-出身 (hometown): 広島
+hashtags: 〇〇
+開放性（Openness）: {}
+勤勉性（Conscientiousness）: {}
+外向性（Extraversion）: {}
+協調性（Agreeableness）: {}
+神経症的傾向（Neuroticism）: {}
+性格 (character): {}
+出身 (hometown): △△
