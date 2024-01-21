@@ -4,7 +4,7 @@ from multiprocessing import Pool, Lock
 
 class Checkpoint:
     def __init__(self, checkpoint_path, numbers, iteration_numbers, init=False,):
-        self.checkpoint_path = checkpoint_path
+        self.checkpoint_path = "checkpoint2.json"
         self.init = init
         self.numbers = numbers
         self.iteration_numbers = iteration_numbers
@@ -15,14 +15,16 @@ class Checkpoint:
     def load_checkpoint(self):
         checkpoint_key = [f"{n}_{i}" for n, i in zip(self.numbers, self.iteration_numbers)]
 
-        if os.path.exists('checkpoint.json') and not self.init:
-            with open('checkpoint.json', 'r') as f:
+        if os.path.exists(self.checkpoint_path) and not self.init:
+            with open(self.checkpoint_path, 'r') as f:
                 checkpoints = json.load(f)
+
             self.make_newlist(checkpoints)
 
         else:
-            with open('checkpoint.json', 'w') as f:
+            with open(self.checkpoint_path, 'w') as f:
                 checkpoint_dic = {'checkpoint': {str(key): False for key in checkpoint_key}}
+                print("make new checkpoint")
                 json.dump(checkpoint_dic, f)
 
             checkpoints = checkpoint_dic
@@ -34,6 +36,7 @@ class Checkpoint:
             first, second = item.split('_')
             self._numbers.append(int(first))
             self._iteration_numbers.append(int(second))
+
 
 
     def update(self, id, idx, global_lock):

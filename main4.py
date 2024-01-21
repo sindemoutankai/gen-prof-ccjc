@@ -95,7 +95,7 @@ def main4(retry_count=0, max_retries=5):
     # init lock
     lock = Lock()
     # multiprocessing iteration with lock
-    with Pool(12, initializer=init_lock, initargs=(lock,)) as pool:
+    with Pool(10, initializer=init_lock, initargs=(lock,)) as pool:
         args = [(iteration_numbers[i], idx, generator, checkpoint) for i, idx in enumerate(numbers)]
         list(tqdm(pool.starmap(process_output, args), total=len(numbers)))
 

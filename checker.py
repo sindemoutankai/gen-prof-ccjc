@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as ET
 import re
 import MeCab
+import unicodedata
 
 
 class Checker:
@@ -63,65 +64,26 @@ class Checker:
             return False
 
 
-#ここから変換処理
-    def _full_to_half(self, text):
-
-        full_to_half_map = str.maketrans(
-            '０１２３４５６７８９ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ　'
-            'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンァィゥェォャュョッー',
-            '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz '
-            'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜｦﾝｧｨｩｪｫｬｭｮｯｰ')
-        text = text.translate(full_to_half_map)
-
-        dakuten_chars = {
-            'ガ': 'ｶﾞ', 'ギ': 'ｷﾞ', 'グ': 'ｸﾞ', 'ゲ': 'ｹﾞ', 'ゴ': 'ｺﾞ',
-            'ザ': 'ｻﾞ', 'ジ': 'ｼﾞ', 'ズ': 'ｽﾞ', 'ゼ': 'ｾﾞ', 'ゾ': 'ｿﾞ',
-            'ダ': 'ﾀﾞ', 'ヂ': 'ﾁﾞ', 'ヅ': 'ﾂﾞ', 'デ': 'ﾃﾞ', 'ド': 'ﾄﾞ',
-            'バ': 'ﾊﾞ', 'ビ': 'ﾋﾞ', 'ブ': 'ﾌﾞ', 'ベ': 'ﾍﾞ', 'ボ': 'ﾎﾞ',
-            'パ': 'ﾊﾟ', 'ピ': 'ﾋﾟ', 'プ': 'ﾌﾟ', 'ペ': 'ﾍﾟ', 'ポ': 'ﾎﾟ',
-            'ヴ': 'ｳﾞ'
-        }
-        for full, half in dakuten_chars.items():
-            text = text.replace(full, half)
-        return text
-
-    def _half_to_full(self, text):
-
-        half_to_full_map = str.maketrans(
-            '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz '
-            'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜｦﾝｧｨｩｪｫｬｭｮｯｰ',
-            '０１２３４５６７８９ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ　'
-            'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンァィゥェォャュョッー')
-        text = text.translate(half_to_full_map)
-
-        # 濁点付き、半濁点付きカタカナの半角を全角に変換
-        handakuten_chars = {
-            'ｶﾞ': 'ガ', 'ｷﾞ': 'ギ', 'ｸﾞ': 'グ', 'ｹﾞ': 'ゲ', 'ｺﾞ': 'ゴ',
-            'ｻﾞ': 'ザ', 'ｼﾞ': 'ジ', 'ｽﾞ': 'ズ', 'ｾﾞ': 'ゼ', 'ｿﾞ': 'ゾ',
-            'ﾀﾞ': 'ダ', 'ﾁﾞ': 'ヂ', 'ﾂﾞ': 'ヅ', 'ﾃﾞ': 'デ', 'ﾄﾞ': 'ド',
-            'ﾊﾞ': 'バ', 'ﾋﾞ': 'ビ', 'ﾌﾞ': 'ブ', 'ﾍﾞ': 'ベ', 'ﾎﾞ': 'ボ',
-            'ﾊﾟ': 'パ', 'ﾋﾟ': 'ピ', 'ﾌﾟ': 'プ', 'ﾍﾟ': 'ペ', 'ﾎﾟ': 'ポ',
-            'ｳﾞ': 'ヴ'
-        }
-        for half, full in handakuten_chars.items():
-            text = text.replace(half, full)
-        return text
-
     def detect_ng_word(self, xml_text):
-        # 半角カタカナを全角に変換
-        xml_text = self._half_to_full(xml_text)
+        #半角を全角に
+        xml_text_2 = unicodedata.normalize('NFKC', xml_text)
+        # 記号系が、unicodeだと検出できない場合があるため、念のため両方。
+        xml_text = xml_text + xml_text_2
+        with open(self.ng_words_file, 'r', encoding='utf-8') as file:
+            ng_words = [line.strip() for line in file]
 
-        with open(self.ng_words_file, 'r') as file:
-            ng_words = {line.strip() for line in file}
-
+        # 形態素解析でテキストを単語に分割
         node = self.mecab.parseToNode(xml_text)
+        words = []
         while node:
-            word = node.surface
-            if word in ng_words:
-                print(word)
-                return False
+            if node.surface:
+                words.append(node.surface)
             node = node.next
+
+        for i in range(len(words)):
+            for j in range(i + 1, len(words) + 1):
+                combined_word = ''.join(words[i:j])
+                if combined_word in ng_words:
+                    print(f"NG word detected: {combined_word}")
+                    return False
         return True
-
-
-

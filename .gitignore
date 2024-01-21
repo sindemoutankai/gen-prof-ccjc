@@ -1,5 +1,7 @@
 .env
 output/
+old_output/
+1.5mil_output.csv
 <<<<<<< Updated upstream
 
 =======
