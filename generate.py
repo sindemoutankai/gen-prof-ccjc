@@ -14,6 +14,8 @@ class Generate:
         self.prompt = prompt
         self.gpt_model = gpt_model
         self.promptgenerate2 = PromptGenerate2("prompt2.txt")
+        self.occupation_path = 'assets/input/occupation_list.csv'
+
 
     def read_prompt(self, input_file):
         with open(input_file, 'r', encoding='utf-8') as file:
@@ -31,14 +33,17 @@ class Generate:
         )
         res = response.choices[0].message.content
         is_valid_format = self.checker.xml_checker(res)
-        contains_ng_word = self.checker.detect_ng_word(res)
+        #contains_ng_word = self.checker.detect_ng_word(res)
         if not is_valid_format:
             print("XML error")
             print(res)
             return self.get_response(prompt)
+
+        """
         if not contains_ng_word:
             print('detect ng word')
             return self.get_response(prompt)
+        """
         return res
 
     def get_response2(self, prompt):
@@ -59,7 +64,6 @@ class Generate:
             return self.get_response2(prompt)
         return res
 
-
     def extract_personality(self, text):
         match = re.search(r"<personality>(.*?)</personality>", text, re.DOTALL)
         if match:
@@ -77,31 +81,55 @@ class Generate:
 
         response = self.get_response(self.prompt)
         personality = self.extract_personality(response)
-        final_prompt = self.promptgenerate2.gen_final_prompt(personality)
+        occupation = self.promptgenerate2.get_oneword(self.occupation_path)
+        final_prompt = self.promptgenerate2.gen_final_prompt(personality, occupation)
         response2 = self.get_response2(final_prompt)
         #merge two response
-        merge_response = self.merge_response(response, response2)
+        merge_response = self.merge_response(response, response2, occupation)
 
         self.write_response(output_file, merge_response)
 
-
-    #二つのレスポンスをまーじ
-    def merge_response(self, response1, response2):
+    def merge_response(self,response1, response2, occupation):
         root1 = ET.fromstring(response1)
         root2 = ET.fromstring(response2)
 
         # root2の要素をroot1に追加する
-        for element in root2:
+        for element in list(root2):
             root1.append(element)
+
+        # 両方のXMLから<occupation>タグを削除
+        for elem in root1.findall('occupation'):
+            root1.remove(elem)
+
+        # 新しい<occupation>タグを追加
+        occupation_elem = ET.Element('occupation')
+        occupation_elem.text = occupation
+        root1.insert(5, occupation_elem)  # <occupation>を2番目の要素として挿入
 
         # 更新されたXMLを文字列として取得
         combined_xml = ET.tostring(root1, encoding='unicode')
 
         combined_xml_str = '\n'.join([line.strip() for line in combined_xml.splitlines()])
-        print(combined_xml_str)
-
         return combined_xml_str
 
+    """
+        #二つのレスポンスをまーじ
+        def merge_response(self, response1, response2, occupation):
+            root1 = ET.fromstring(response1)
+            root2 = ET.fromstring(response2)
+
+            # root2の要素をroot1に追加する
+            for element in root2:
+                root1.append(element)
+
+            # 更新されたXMLを文字列として取得
+            combined_xml = ET.tostring(root1, encoding='unicode')
+
+            combined_xml_str = '\n'.join([line.strip() for line in combined_xml.splitlines()])
+            #print(combined_xml_str)
+
+            return combined_xml_str
+    """
 
 
     def overide_api(self):

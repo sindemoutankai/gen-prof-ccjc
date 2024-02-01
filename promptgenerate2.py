@@ -46,14 +46,13 @@ class PromptGenerate2:
         hashtag = self.get_oneword(self.hashtag_files)
         hometown = self.get_oneword(self.hometown_files)
         new_prompt, _type, type_id = self.fill_bigfive(_id)
-        full_prompt = new_prompt.replace("〇〇", hashtag).replace("△△", hometown)
+        full_prompt = new_prompt.replace("△△", hometown)
         #print(full_prompt)
         return full_prompt, _type, type_id
 
-    def gen_final_prompt(self, personality):
+    def gen_final_prompt(self, personality, occupation):
         with open(self.prompt_file2, 'r') as file:
             template = file.read()
-            final_prompt = template.replace("〇〇",personality)
-            #print(new_prompt)
+            final_prompt = template.replace("〇〇",personality).replace("XX", occupation)
             return final_prompt
 

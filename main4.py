@@ -28,7 +28,7 @@ def process_output(id, idx, generator, checkpoint):
         prompt, _type, type_id = generator.gen_full_prompt(idx)
         chat_gpt = Generate(prompt, gpt_model='gpt-3.5-turbo')
 
-        output_folder = f"output/{_type}_output"
+        output_folder = f"output/prompt_ver5.0/{_type}_output"
         output_file_path = f"{output_folder}/{_type}_{type_id:02d}_{id:05d}.xml"
         #上書きしないように
         if not os.path.exists(output_file_path):
@@ -59,10 +59,8 @@ def process_output(id, idx, generator, checkpoint):
             raise  # その他のエラーの場合は例外を再度発生させる
 
 def main4(retry_count=0, max_retries=5):
-    start_time = time.time()
 
     global iteration_numbers
-    start_time = time.time()
     api_key = config.OPENAI_API_KEY
     # set up
     checklist_init = os.getenv("CHECKLIST_INIT")
@@ -95,13 +93,11 @@ def main4(retry_count=0, max_retries=5):
     # init lock
     lock = Lock()
     # multiprocessing iteration with lock
-    with Pool(10, initializer=init_lock, initargs=(lock,)) as pool:
+    with Pool(35, initializer=init_lock, initargs=(lock,)) as pool:
         args = [(iteration_numbers[i], idx, generator, checkpoint) for i, idx in enumerate(numbers)]
         list(tqdm(pool.starmap(process_output, args), total=len(numbers)))
-
-    end_time = time.time()
-    print(end_time - start_time)
 
 
 if __name__ == "__main__":
     main4()
+

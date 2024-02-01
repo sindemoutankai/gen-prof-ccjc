@@ -19,7 +19,7 @@ class Checker:
 
             expected_tags = {
                 'hashtags', 'big_five_chart', 'character', 'personality',
-                'hometown'
+                'hometown','occupation'
             }
 
             for child in root:
@@ -45,7 +45,7 @@ class Checker:
 
             expected_tags = {
                 'occupation', 'favorite_things', 'hobby',
-                'skill', 'habit', 'dream', 'talent', 'motto', 'comment'
+                'skill', 'habit', 'dream', 'talent', 'motto'
             }
 
             # XML内のタグ集める
@@ -63,9 +63,8 @@ class Checker:
         except ET.ParseError:
             return False
 
-
-    def detect_ng_word(self, xml_text):
-        #半角を全角に
+    def detect_ng_word(self, xml_text, pool=False):
+        # 半角を全角に
         xml_text_2 = unicodedata.normalize('NFKC', xml_text)
         # 記号系が、unicodeだと検出できない場合があるため、念のため両方。
         xml_text = xml_text + xml_text_2
@@ -80,10 +79,21 @@ class Checker:
                 words.append(node.surface)
             node = node.next
 
-        for i in range(len(words)):
-            for j in range(i + 1, len(words) + 1):
-                combined_word = ''.join(words[i:j])
-                if combined_word in ng_words:
-                    print(f"NG word detected: {combined_word}")
+        for i in range(len(words) - 1):
+            first_word = words[i]
+            combined_two_word = words[i] + words[i + 1]
+            if i >= 1:
+                combined_three_word = words[i - 1] + combined_two_word
+                if combined_three_word in ng_words:
+                    print(f"NG word detected: {combined_three_word}")
                     return False
+
+            if first_word in ng_words:
+                print(f"NG word detected: {first_word}")
+                return False
+
+            if combined_two_word in ng_words:
+                print(f"NG word detected: {combined_two_word}")
+                return False
+
         return True
